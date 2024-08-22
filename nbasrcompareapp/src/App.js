@@ -1,10 +1,15 @@
 import logo from './logo.svg';
 import './App.css';
-
+import React from "react"
+import Axios from "axios"
+import Cookies from 'js-cookie'
+const csrftoken=Cookies.get('csrftoken')
 function getplayernames(p1,p2){
-  console.log(p1);
-  console.log(p2);
+  Axios.post('http://127.0.0.1:8000/dbapi/',
+    {player1name:p1,
+    player2name:p2}).then(console.log("SENT"))
 }
+
 function App() {
   return (
       <div>

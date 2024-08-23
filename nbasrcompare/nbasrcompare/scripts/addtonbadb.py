@@ -20,8 +20,13 @@ class srdb:
     def get(self,playername):
         query=("SELECT * FROM players WHERE name = %s")
         self.cursor.execute(query,(playername,))
+        rvdict={}
         for (name, strengths, weaknesses, other) in self.cursor:
-            print(name,strengths,weaknesses,other)
+            rvdict['name']=name
+            rvdict['strengths']=strengths
+            rvdict['weaknesses']=weaknesses
+            rvdict['other notes']=other
+        return rvdict
     def commit(self):
         self.dbconnect.commit()
     def close(self):

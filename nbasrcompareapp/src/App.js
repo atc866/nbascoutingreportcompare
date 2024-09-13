@@ -13,6 +13,7 @@ function getplayernames(p1,p2){
         getcomparison(response.data);
         console.log(response.data.comparison)
         document.getElementById('comparison').innerHTML=response.data.comparison
+        document.getElementById('cosinescore').innerHTML=response.data.score
     })
 }
 
@@ -24,13 +25,18 @@ function App() {
           <datalist id="p1">
               <option>Kyrie Irving</option>
               <option>Stephen Curry</option>
+              <option>Paul George</option>
+              <option>Brandon Miller</option>
           </datalist>
           <input id="selectp2" type="text" autoComplete="on" list="p2"/> 
           <datalist id="p2">
             <option>Kyrie Irving</option>
             <option>Stephen Curry</option>
+            <option>Paul George</option>
+            <option>Brandon Miller</option>
           </datalist>
           <div id="comparison">hello</div>
+          <div id="cosinescore">score</div>
           <button type="button" onClick={() => {
             getplayernames(document.getElementById("selectp1").value,document.getElementById("selectp2").value);
           }}>compare</button>

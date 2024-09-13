@@ -1,37 +1,21 @@
 #class will allow for interaction with mysql database/table
 #main functions will be get and set
-import mysql.connector
+from pymongo.mongo_client import MongoClient
+from pymongo.server_api import ServerApi
+from sentence_transformers import SentenceTransformer
+from confidential import USERNAME,PASSWORD
 class srdb:
-    def __init__(self,hosti,useri,passwordi,databasei):
-        self.dbconnect = mysql.connector.connect(
-            host=hosti,
-            user=useri,
-            password=passwordi,
-            database=databasei
-        )
-        self.cursor=self.dbconnect.cursor()
-    def set(self,playername,s,w,n):
-        add_sr=("INSERT INTO players"
-                "(name, strengths, weaknesses, other)"
-                "VALUES (%s, %s, %s, %s)")
-        info_sr=(playername,s,w,n)
-        self.cursor.execute(add_sr,info_sr)
-        print(playername+" successfully inserted")
+    def __init__(self,dbname,collection):
+        self.client=MongoClient("mongodb+srv://"+USERNAME+":"+PASSWORD+"@nbascoutingreportdb.f9lpm.mongodb.net/?retryWrites=true&w=majority&appName=nbascoutingreportdb", server_api=ServerApi('1'))
+        self.db=self.client[dbname]
+        self.collection=self.db[collection]
+        self.model=SentenceTransformer("all-mpnet-base-v2")
+    def insert(self,playername,s,w,n):
+        swn=s+" "+w+" "+n
+        playerdict={"playername":playername,"Strengths":s,"Weaknesses":w,"other notes":n,"embedding":self.model.encode(swn).tolist()}
+        self.collection.insert_one(playerdict)
     def get(self,playername):
-        query=("SELECT * FROM players WHERE name = %s")
-        self.cursor.execute(query,(playername,))
-        rvdict={}
-        for (name, strengths, weaknesses, other) in self.cursor:
-            rvdict['name']=name
-            rvdict['strengths']=strengths
-            rvdict['weaknesses']=weaknesses
-            rvdict['other notes']=other
-        return rvdict
-    def commit(self):
-        self.dbconnect.commit()
-    def close(self):
-        self.cursor.close()
-        self.dbconnect.close()
+        return None
 
         
 
